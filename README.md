@@ -3,8 +3,6 @@
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Pandas](https://img.shields.io/badge/Pandas-1.6.2-lightgrey)
 ![Google API](https://img.shields.io/badge/Google-API-green)
-![Build](https://img.shields.io/github/actions/workflow/status/AlphaLansar/ecommerce-analytics/python-app.yml?branch=main)
-
 
 ## 📌 Table des matières
 
