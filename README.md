@@ -134,8 +134,7 @@ python main.py
 
 ## 📄 Licence
 
-Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
-
+Ce projet n'est pas sous licence.
 ## 💡 Auteur
 
 **Alpha Lansar**
