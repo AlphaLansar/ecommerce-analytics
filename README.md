@@ -4,7 +4,7 @@
 ![Pandas](https://img.shields.io/badge/Pandas-1.6.2-lightgrey)
 ![Google API](https://img.shields.io/badge/Google-API-green)
 ![Build](https://img.shields.io/github/actions/workflow/status/AlphaLansar/ecommerce-analytics/python-app.yml?branch=main)
-![License](https://img.shields.io/badge/License-MIT-green)
+
 
 ## 📌 Table des matières
 
@@ -137,5 +137,5 @@ python main.py
 Ce projet n'est pas sous licence.
 ## 💡 Auteur
 
-**Alpha Lansar**
+**Alpha Abdoulaye Lansar**
 Formation Data Engineering – Projet TP `ecommerce-analytics`
