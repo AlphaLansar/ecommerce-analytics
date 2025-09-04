@@ -1,16 +1,32 @@
-# Ecommerce Analytics - Projet ETL
+# Ecommerce Analytics - Pipeline ETL
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
 ![Pandas](https://img.shields.io/badge/Pandas-1.6.2-lightgrey)
 ![Google API](https://img.shields.io/badge/Google-API-green)
+![Build](https://img.shields.io/github/actions/workflow/status/AlphaLansar/ecommerce-analytics/python-app.yml?branch=main)
+![License](https://img.shields.io/badge/License-MIT-green)
+
+## 📌 Table des matières
+
+* [Contexte](#-contexte)
+* [Structure du projet](#-structure-du-projet)
+* [Fonctionnement du pipeline](#-fonctionnement-du-pipeline)
+* [Prérequis](#-prérequis)
+* [Installation et lancement](#-installation-et-lancement)
+* [Gestion des erreurs](#-gestion-des-erreurs)
+* [Technologies utilisées](#-technologies-utilisées)
+* [Licence](#-licence)
+* [Auteur](#-auteur)
 
 ## 📌 Contexte
 
-Ce projet a été réalisé dans le cadre de la formation **Data Engineering**. L'objectif est de mettre en place un **pipeline ETL complet** pour collecter, transformer et charger des données e-commerce provenant de Google Drive, puis les préparer pour analyse.
+Ce projet a été réalisé dans le cadre de la formation **Data Engineering de DATA Afrique HUB**.
+Il implémente un **pipeline ETL complet** pour collecter, transformer et charger des données e-commerce depuis Google Drive afin de les préparer pour analyse.
 
-Le pipeline prend en charge :
-- Les données clients (plusieurs fichiers CSV).
-- Les données produits (fichier CSV unique).
+Le pipeline gère :
+
+* Les données clients (plusieurs fichiers CSV).
+* Les données produits (fichier CSV unique).
 
 ## 📁 Structure du projet
 
@@ -18,95 +34,109 @@ Le pipeline prend en charge :
 ecommerce-analytics/
 │
 ├─ data/
-│  ├─ raw_data/
-│  │  ├─ clients/          # Fichiers clients téléchargés depuis Google Drive
-│  │  └─ products/         # Fichier produits téléchargé depuis Google Drive
-│  ├─ processed/           # Fichiers transformés (nettoyés et concaténés)
-│  └─ load/                # Fichiers finaux prêts pour utilisation ou analyse
+│  ├─ raw_data/          # Données brutes téléchargées depuis Google Drive
+│  │  ├─ clients/
+│  │  └─ products/
+│  ├─ processed/         # Données nettoyées et transformées
+│  └─ load/              # Fichiers finaux prêts pour analyse
 │
 ├─ src/
 │  ├─ dags/
 │  │  └─ common/
-│  │     ├─ extract.py     # Extraction depuis Google Drive
-│  │     ├─ transform.py   # Transformation et nettoyage des fichiers
-│  │     └─ load.py        # Chargement des fichiers transformés
-│  └─ config.py            # Configuration des chemins et Service Account
+│  │     ├─ extract.py    # Extraction depuis Google Drive
+│  │     ├─ transform.py  # Nettoyage et transformation
+│  │     └─ load.py       # Chargement final des fichiers
+│  └─ config.py           # Configuration des chemins et paramètres
 │
-├─ main.py                 # Script principal pour lancer l'ETL complet
+├─ main.py                # Script principal pour exécuter le pipeline ETL
 └─ README.md
 ```
 
-## ⚙️ Fonctionnement du pipeline ETL
+## ⚙️ Fonctionnement du pipeline
 
-Le pipeline comprend trois étapes : **Extraction, Transformation et Chargement**.
+Le pipeline ETL suit trois étapes principales :
 
-### 1. Extraction (extract.py)
-- Récupère les fichiers clients et produits depuis Google Drive.
-- Télécharge les fichiers dans `data/raw_data/clients` et `data/raw_data/products`.
-- Gestion des erreurs pour fichiers non trouvés ou inaccessibles.
+### 1. Extraction (`extract.py`)
 
-### 2. Transformation (transform.py)
-- Clients : concaténation de tous les CSV, suppression des doublons, vérification des fichiers vides.
-- Produits : lecture du fichier unique, suppression des doublons et gestion des erreurs.
-- Sauvegarde des fichiers transformés dans `data/processed/`.
+* Téléchargement des fichiers clients et produits depuis Google Drive.
+* Stockage dans `data/raw_data/clients` et `data/raw_data/products`.
+* Gestion des erreurs pour fichiers manquants ou inaccessibles.
 
-### 3. Chargement (load.py)
-- Déplace les fichiers transformés vers `data/load/` pour utilisation ou analyse.
-- Fichiers finaux :
-  - `clients_final.csv`
-  - `products_final.csv`
+### 2. Transformation (`transform.py`)
+
+* Clients : concaténation, suppression des doublons et vérification des fichiers vides.
+* Produits : nettoyage et gestion des doublons.
+* Sauvegarde des fichiers transformés dans `data/processed/`.
+
+### 3. Chargement (`load.py`)
+
+* Déplacement des fichiers transformés vers `data/load/`.
+* Fichiers finaux générés :
+
+  * `clients_final.csv`
+  * `products_final.csv`
 
 ## 🛠️ Prérequis
 
-- Python 3.10 ou supérieur
-- Bibliothèques :
+* Python 3.10 ou supérieur
+* Bibliothèques Python :
+
 ```bash
 pip install pandas google-api-python-client google-auth google-auth-httplib2 google-auth-oauthlib
 ```
-- Service Account Google Drive configuré avec accès aux fichiers CSV.
 
-## 🚀 Instructions pour exécuter le projet
+* Compte Service Account Google Drive configuré avec accès aux fichiers CSV.
 
-1. **Cloner le dépôt**
+## 🚀 Installation et lancement
+
+1. Cloner le dépôt :
+
 ```bash
-git clone <URL_DE_TON_REPO>
+git clone https://github.com/AlphaLansar/ecommerce-analytics.git
 cd ecommerce-analytics
 ```
 
-2. **Créer les dossiers nécessaires**
+2. Créer les dossiers de données :
+
 ```bash
 mkdir -p data/raw_data/clients data/raw_data/products data/processed data/load
 ```
 
-3. **Supprimer les fichiers compilés Python (optionnel)**
-```bash
-find . -type f -name "*.pyc" -delete
-find . -type d -name "__pycache__" -exec rm -r {} +
-```
+3. Exporter le PYTHONPATH :
 
-4. **Exporter le PYTHONPATH**
 ```bash
 export PYTHONPATH=$(pwd)/src
 ```
 
-5. **Lancer le pipeline ETL complet**
+4. Exécuter le pipeline ETL complet :
+
 ```bash
 python main.py
 ```
 
-6. **Vérifier les fichiers finaux**
-- `data/load/clients_final.csv`
-- `data/load/products_final.csv`
+5. Vérifier les fichiers finaux :
+
+* `data/load/clients_final.csv`
+* `data/load/products_final.csv`
 
 ## ⚠️ Gestion des erreurs
 
-- Fichiers clients vides ou invalides : warning et ignorés.
-- Fichiers produits vides ou invalides : erreur affichée.
-- Les logs détaillent chaque étape pour faciliter le debug.
+* Fichiers clients vides : warning, ignorés.
+* Fichiers produits vides ou invalides : erreur affichée.
+* Les logs détaillent chaque étape pour faciliter le debug.
+
+## 🖥️ Technologies utilisées
+
+* Python 3.12
+* Pandas 1.6.2
+* Google API (Drive, OAuth2)
+* Git & GitHub
+
+## 📄 Licence
+
+Ce projet est sous licence **MIT**. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ## 💡 Auteur
 
 **Alpha Lansar**
-Formation Data Engineering
-Projet réalisé dans le cadre du TP `ecommerce-analytics`.
-
+Formation Data Engineering – Projet TP `ecommerce-analytics`
