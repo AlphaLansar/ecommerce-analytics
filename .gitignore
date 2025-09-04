@@ -4,4 +4,4 @@ airflow.cfg
 airflow.db
 data/
 simple_auth_manager_passwords.json.generated
-logs/
+logs/src/dags/common/service_account.json
